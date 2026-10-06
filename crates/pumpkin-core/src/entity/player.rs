@@ -2306,6 +2306,12 @@ impl Player {
         self.get_entity().set_pose(actual_pose);
     }
 
+    pub fn stop_sleeping(&self) {
+        if self.is_sleeping() {
+            self.wake_up();
+        }
+    }
+
     pub fn wake_up(&self) {
         let world = self.world();
         let Some(bed_pos) = self.sleeping_bed_pos.load() else {

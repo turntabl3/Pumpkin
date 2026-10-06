@@ -2015,6 +2015,10 @@ impl LivingEntity {
 
             self.update_death_stats(&*dyn_self, killer);
 
+            if let Some(player) = dyn_self.get_player() {
+                player.stop_sleeping();
+            }
+
             // Plays the death sound
             world.play_sound_fine(
                 self.death_sound(&*dyn_self),
@@ -3025,6 +3029,13 @@ impl LivingEntity {
             {
                 return false;
             }
+        }
+
+        if self.entity.entity_type == &EntityType::PLAYER
+            && let Some(entity) = world.get_entity_by_id(self.entity.entity_id)
+            && let Some(player) = entity.get_player()
+        {
+            player.stop_sleeping();
         }
 
         // Vanilla parity: entities in FREEZE_HURTS_EXTRA_TYPES take 5x freezing damage.
